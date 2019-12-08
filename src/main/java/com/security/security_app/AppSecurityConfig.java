@@ -35,6 +35,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter
   }
 
 
+  // Add this method if you want use own login page, else remove and use default
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
