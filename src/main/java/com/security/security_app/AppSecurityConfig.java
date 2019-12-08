@@ -2,6 +2,7 @@ package com.security.security_app;
 
 
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;
     import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,20 +18,34 @@ package com.security.security_app;
 
 @Configuration
 @EnableWebSecurity
+@EnableOAuth2Sso
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter
 {
   @Autowired
   private UserDetailsService userDetailsService;
-//  private MyUserDetailsService userDetailsService = new MyUserDetailsService();
 
+  //for oAyth2
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+
+    http
+            .csrf().disable()
+            .authorizeRequests().antMatchers("/login").permitAll()
+            .anyRequest().authenticated();
+
+  }
+
+
+
+  // For own auth
+  /*
   @Bean
   public AuthenticationProvider authProvider()
   {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
     provider.setUserDetailsService(userDetailsService);
-//    provider.setPasswordEncoder(new BCryptPasswordEncoder());
-//    provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
     provider.setPasswordEncoder(new BCryptPasswordEncoder());
+    //provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
     return provider;
   }
 
@@ -53,6 +68,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter
             .logoutSuccessUrl("/logout-success").permitAll();
 
   }
+  */
+
+
 
 
 //  @Bean
